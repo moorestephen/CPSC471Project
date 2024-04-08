@@ -7,7 +7,7 @@ class Club(models.Model):
 
 class Swimmer(models.Model):
     id = models.AutoField(primary_key = True)
-    email = models.EmailField(primary_key = True)
+    email = models.EmailField(unique = True)
     dob = models.DateField()
     fname = models.CharField(max_length = 15)
     lname = models.CharField(max_length = 30)
@@ -35,7 +35,7 @@ class GroupCoaches(models.Model):
     group = models.ForeignKey(Group, on_delete = models.CASCADE)
 
 class Admin(models.Model):
-    email = models.EmailField(unique = True)
+    email = models.EmailField(primary_key = True)
     tenure_start = models.DateField()
     fname = models.CharField(max_length = 15)
     lname = models.CharField(max_length = 30)
