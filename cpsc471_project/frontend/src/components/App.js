@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import {BrowserRouter as Router, Routes, Route, Link, Redirect} from "react-router-dom";
+import axios from 'axios';
 import HomePage from "./HomePage.js";
 import LoginPage from "./LoginPage.js";
 import AdminPage from "./AdminPage.js";
@@ -9,6 +10,7 @@ import SwimmerPage from "./SwimmerPage.js";
 
 
 function App(props) {
+
     return (
         <div>
             <Router>
