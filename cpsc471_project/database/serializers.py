@@ -54,6 +54,11 @@ class DatabaseGroupSerializer(serializers.ModelSerializer):
         model = DatabaseGroup
         fields = ['name', 'club']
 
+class DatabaseGroupNameOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DatabaseGroup
+        fields = ['name']
+
 class DatabaseGroupcoachesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DatabaseGroupcoaches

@@ -26,7 +26,7 @@ from .serializers import (ClubListSerializer, DatabaseAdminSerializer, DatabaseC
                           DatabaseCompetitionswimmersattendingSerializer, DatabaseEntrySerializer,
                           DatabaseEventSerializer, DatabaseEventrecordSerializer, DatabaseGroupSerializer,
                           DatabaseGroupcoachesSerializer, DatabaseGrouppracticesSerializer, DatabaseSwimmerSerializer,
-                          DatabaseSwimmergroupSerializer, SwimmerAndGroupSerializer)
+                          DatabaseSwimmergroupSerializer, SwimmerAndGroupSerializer, DatabaseGroupNameOnlySerializer)
 from rest_framework import status, mixins, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -106,6 +106,10 @@ class GroupList(generics.ListCreateAPIView):
 class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DatabaseGroup.objects.all()
     serializer_class = DatabaseGroupSerializer
+
+class GroupNameOnlyList(generics.ListCreateAPIView):
+    queryset = DatabaseGroup.objects.all()
+    serializer_class = DatabaseGroupNameOnlySerializer
 
 class GroupCoachesList(generics.ListCreateAPIView):
     queryset = DatabaseGroupcoaches.objects.all()

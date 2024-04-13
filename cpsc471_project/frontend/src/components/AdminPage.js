@@ -9,10 +9,22 @@ import DisplayAppBar from "./DisplayAppBar.js";
 import UserInformation from "./UserInformation.js";
 import { TableBody, TableCell, TableHead, TableRow, Button, Box,
          Dialog, DialogContent, TextField,
-         DialogTitle, DialogActions } from "@material-ui/core";
+         DialogTitle, DialogActions} from "@material-ui/core";
+import { Autocomplete } from '@material-ui/lab';
 
 function AddSwimmerPopup(props) {
-    const { onClose, open } = props;
+    const { open, onClose } = props;
+    const [ groups, setGroups ] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/database/groups/')
+            .then(response => {
+                setGroups(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }, []);
 
     const handleClose = () => {
         onClose();
@@ -21,8 +33,30 @@ function AddSwimmerPopup(props) {
     return (
         <Dialog onClose={handleClose} open={open}>
             <DialogTitle>Add Swimmer</DialogTitle>
-            <DialogContent>
-                <TextField label="Testing" />
+            <DialogContent >
+                <Grid container spacing={2}>
+                    <Grid item>
+                        <TextField required label="Email" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <TextField required label="First Name" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <TextField required label="Last Name" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <TextField required type="date" label="Birthdate" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <Autocomplete
+                            id="group-select"
+                            options={groups}
+                            getOptionLabel={(option) => option.name}
+                            style={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} label="Group" variant="outlined" />}
+                        />
+                    </Grid>
+                </Grid>
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" onClick={handleClose} >
@@ -52,10 +86,10 @@ export default function AdminPage(props) {
     };
 
     /**
-    * Hook that fetches club data from the database - currently no dependencies
+    * Hook that fetches swimmer data from the database - currently no dependencies
     */
     useEffect(() => {
-        axios.get('http://localhost:8000/database/swimmers/')
+        axios.get('http://localhost:8000/database/swimmers-and-group/')
             .then(response => {
                 setSwimmerData(response.data);
             })
