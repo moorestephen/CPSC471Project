@@ -103,6 +103,14 @@ class CompetitionListCreate(generics.ListCreateAPIView):
     queryset = Competition.objects.all()
     serializer_class = CompetitionSerializer
 
+class UpcomingCompetitionListCreate(generics.ListCreateAPIView):
+    def get(self, request):
+        queryset = Competition.objects.raw(
+            "SELECT * FROM database_competition WHERE end_date >= Date('now')"
+        )
+        serialized = CompetitionSerializer(queryset, many = True)
+        return Response(serialized.data)
+
 class CompetitionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Competition.objects.all()
     serializer_class = CompetitionSerializer
