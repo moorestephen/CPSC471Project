@@ -10,13 +10,23 @@ import DisplayAppBar from "./DisplayAppBar.js";
 import UserInformation from "./UserInformation.js";
 
 export default function SwimmerPage(props) {
-    const [swimmersData, setSwimmersData] = useState([]);
+    const [eventRecordData, setEventRecordData] = useState([]);
+    const [competitionData, setCompetitionData] = useState([]);
 
     useEffect(() => {
         // Assuming you pass the coach's ID as props
-        axios.get(`http://localhost:8000/database/swimmers`)
+
+        axios.get(`http://localhost:8000/database/event_record`)
             .then(response => {
-                setSwimmersData(response.data);
+                setEventRecordData(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        axios.get(`http://localhost:8000/database/competition`)
+            .then(response => {
+                setCompetitionData(response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -34,19 +44,32 @@ export default function SwimmerPage(props) {
                         <UserInformation name={props.swimmerName} role="Swimmer" />
                     </Paper>
                 </Grid>
-                <Grid item xs={4}>
-                    <Paper variant="outlined">
-                        <Typography variant='h6'>Entries</Typography>
-                    </Paper>
-                </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                     <Paper variant="outlined">
                         <Typography variant='h6'>Event Record</Typography>
                     </Paper>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                     <Paper variant="outlined">
                         <Typography variant='h6'>Upcoming Competitions</Typography>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Sanctioned</TableCell>
+                                    <TableCell>Date</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {competitionData.map((competition) => (
+                                    <TableRow key={competition.name}>
+                                        <TableCell>{competition.name}</TableCell>
+                                        <TableCell>{competition.sanctioned ? 'Yes' : 'No'}</TableCell>
+                                        <TableCell>{competition.start_date} to {competition.end_date}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </Paper>
                 </Grid>
             </Grid>

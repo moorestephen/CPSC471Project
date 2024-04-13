@@ -21,8 +21,9 @@ export default function CoachPage(props) {
             .catch((error) => {
                 console.log(error);
             });
+
         
-        axios.get(`http://localhost:8000/database/competition`)
+        axios.get(`http://localhost:8000/database/upcoming_competitions`)
             .then(response => {
                 setCompetitionData(response.data);
             })

@@ -9,6 +9,6 @@ urlpatterns = [
     path('clubs/', views.ClubList.as_view()),
     path('swimmers-and-group/', views.SwimmerAndGroupList.as_view()),
     path('swimmers/', views.SwimmerList.as_view()),
-    path('competition/', views.CompetitionList.as_view())
-
+    path('upcoming_competitions/', views.UpcomingCompetitionList.as_view()),
+    path('event_record/', views.EventRecordList.as_view())
 ]
