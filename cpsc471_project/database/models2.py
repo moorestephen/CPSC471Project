@@ -16,8 +16,8 @@ class AuthGroup(models.Model):
 
 
 class AuthGroupPermissions(models.Model):
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
+    group = models.ForeignKey(AuthGroup, on_delete=models.CASCADE)
+    permission = models.ForeignKey('AuthPermission', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -26,7 +26,7 @@ class AuthGroupPermissions(models.Model):
 
 
 class AuthPermission(models.Model):
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
+    content_type = models.ForeignKey('DjangoContentType', on_delete=models.CASCADE)
     codename = models.CharField(max_length=100)
     name = models.CharField(max_length=255)
 
@@ -54,8 +54,8 @@ class AuthUser(models.Model):
 
 
 class AuthUserGroups(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
+    user = models.ForeignKey(AuthUser, on_delete=models.CASCADE)
+    group = models.ForeignKey(AuthGroup, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -64,8 +64,8 @@ class AuthUserGroups(models.Model):
 
 
 class AuthUserUserPermissions(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
+    user = models.ForeignKey(AuthUser, on_delete=models.CASCADE)
+    permission = models.ForeignKey(AuthPermission, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -78,7 +78,7 @@ class DatabaseAdmin(models.Model):
     tenure_start = models.DateField()
     fname = models.CharField(max_length=15)
     lname = models.CharField(max_length=30)
-    club_name = models.ForeignKey('DatabaseClub', models.DO_NOTHING)
+    club_name = models.ForeignKey('DatabaseClub', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -100,7 +100,7 @@ class DatabaseCoach(models.Model):
     contract_start = models.DateField()
     fname = models.CharField(max_length=15)
     lname = models.CharField(max_length=30)
-    club = models.ForeignKey(DatabaseClub, models.DO_NOTHING)
+    club = models.ForeignKey(DatabaseClub, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -119,9 +119,9 @@ class DatabaseCompetition(models.Model):
 
 
 class DatabaseCompetitioncoachdelegations(models.Model):
-    coach = models.ForeignKey(DatabaseCoach, models.DO_NOTHING)
-    competition = models.ForeignKey(DatabaseCompetition, models.DO_NOTHING)
-    delegating_admin = models.ForeignKey(DatabaseAdmin, models.DO_NOTHING)
+    coach = models.ForeignKey(DatabaseCoach, on_delete=models.CASCADE)
+    competition = models.ForeignKey(DatabaseCompetition, on_delete=models.CASCADE)
+    delegating_admin = models.ForeignKey(DatabaseAdmin, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -129,8 +129,8 @@ class DatabaseCompetitioncoachdelegations(models.Model):
 
 
 class DatabaseCompetitionswimmersattending(models.Model):
-    competition = models.ForeignKey(DatabaseCompetition, models.DO_NOTHING)
-    swimmer = models.ForeignKey('DatabaseSwimmer', models.DO_NOTHING)
+    competition = models.ForeignKey(DatabaseCompetition, on_delete=models.CASCADE)
+    swimmer = models.ForeignKey('DatabaseSwimmer', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -140,7 +140,7 @@ class DatabaseCompetitionswimmersattending(models.Model):
 class DatabaseEntry(models.Model):
     entry_time = models.TimeField()
     final_time = models.PositiveIntegerField()
-    swimmer = models.ForeignKey('DatabaseSwimmer', models.DO_NOTHING)
+    swimmer = models.ForeignKey('DatabaseSwimmer', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -151,7 +151,7 @@ class DatabaseEvent(models.Model):
     distance = models.PositiveIntegerField()
     stroke = models.CharField(max_length=30)
     course = models.CharField(max_length=20)
-    competition = models.ForeignKey(DatabaseCompetition, models.DO_NOTHING)
+    competition = models.ForeignKey(DatabaseCompetition, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -164,8 +164,8 @@ class DatabaseEventrecord(models.Model):
     distance = models.PositiveIntegerField()
     stroke = models.CharField(max_length=30)
     course = models.CharField(max_length=20)
-    competition = models.ForeignKey(DatabaseCompetition, models.DO_NOTHING)
-    swimmer = models.ForeignKey('DatabaseSwimmer', models.DO_NOTHING)
+    competition = models.ForeignKey(DatabaseCompetition, on_delete=models.CASCADE)
+    swimmer = models.ForeignKey('DatabaseSwimmer', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -175,7 +175,7 @@ class DatabaseEventrecord(models.Model):
 class DatabaseGroup(models.Model):
     name = models.CharField(primary_key=True, max_length=100)
     monthly_fee = models.DecimalField(max_digits=10, decimal_places=5)  # max_digits and decimal_places have been guessed, as this database handles decimal fields as float
-    club = models.ForeignKey(DatabaseClub, models.DO_NOTHING)
+    club = models.ForeignKey(DatabaseClub, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -183,8 +183,8 @@ class DatabaseGroup(models.Model):
 
 
 class DatabaseGroupcoaches(models.Model):
-    coach = models.ForeignKey(DatabaseCoach, models.DO_NOTHING)
-    group = models.ForeignKey(DatabaseGroup, models.DO_NOTHING)
+    coach = models.ForeignKey(DatabaseCoach,  on_delete=models.CASCADE)
+    group = models.ForeignKey(DatabaseGroup, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -195,7 +195,7 @@ class DatabaseGrouppractices(models.Model):
     day = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    group = models.ForeignKey(DatabaseGroup, models.DO_NOTHING)
+    group = models.ForeignKey(DatabaseGroup, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -207,7 +207,7 @@ class DatabaseSwimmer(models.Model):
     dob = models.DateField()
     fname = models.CharField(max_length=15)
     lname = models.CharField(max_length=30)
-    club = models.ForeignKey(DatabaseClub, models.DO_NOTHING)
+    club = models.ForeignKey(DatabaseClub, on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -215,8 +215,8 @@ class DatabaseSwimmer(models.Model):
 
 
 class DatabaseSwimmergroup(models.Model):
-    group = models.ForeignKey(DatabaseGroup, models.DO_NOTHING)
-    swimmer = models.ForeignKey(DatabaseSwimmer, models.DO_NOTHING)
+    group = models.ForeignKey(DatabaseGroup,  on_delete=models.CASCADE)
+    swimmer = models.ForeignKey(DatabaseSwimmer,  on_delete=models.CASCADE)
 
     class Meta:
         managed = False
@@ -228,8 +228,8 @@ class DjangoAdminLog(models.Model):
     object_repr = models.CharField(max_length=200)
     action_flag = models.PositiveSmallIntegerField()
     change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    content_type = models.ForeignKey('DjangoContentType', blank=True, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(AuthUser, on_delete=models.CASCADE)
     action_time = models.DateTimeField()
 
     class Meta:
