@@ -1,88 +1,74 @@
 from rest_framework import serializers
-from .models2 import (DatabaseClub, DatabaseAdmin, DatabaseCoach, DatabaseCompetition,
-                      DatabaseCompetitioncoachdelegations, DatabaseCompetitionswimmersattending,
-                      DatabaseEntry, DatabaseEvent, DatabaseEventrecord, DatabaseGroup, DatabaseGroupcoaches,
-                      DatabaseGrouppractices, DatabaseSwimmer, DatabaseSwimmergroup)
+from .models import(Club, Swimmer, Group, SwimmerGroup, Coach, GroupCoaches, Admin,
+                     GroupPractices, Competition, CompetitionCoachDelegations, 
+                     CompetitionSwimmersAttending, EventRecord, Event, Entry)
 
-class ClubListSerializer(serializers.ModelSerializer):
+class ClubSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseClub
-        fields = ['name', 'city']
+        model = Club
+        fields = '__all__'
 
-class DatabaseAdminSerializer(serializers.ModelSerializer):
+class SwimmerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseAdmin
-        fields = ['email', 'tenure_start', 'fname', 'lname', 'club_name']
+        model = Swimmer
+        fields = '__all__'
 
-class DatabaseCoachSerializer(serializers.ModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseCoach
-        fields = ['email', 'tenure_start', 'contract_start', 'fname', 'lname', 'club']
+        model = Group
+        fields = '__all__'
 
-class DatabaseCompetitionSerializer(serializers.ModelSerializer):
+class SwimmerGroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseCompetition
-        fields = ['name', 'sanctioned', 'start_date', 'end_date']
+        model = SwimmerGroup
+        fields = '__all__'
 
-class DatabaseCompetitioncoachdelegationsSerializer(serializers.ModelSerializer):
+class CoachSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseCompetitioncoachdelegations
-        fields = ['coach', 'competition', 'delegating_admin']
+        model = Coach
+        fields = '__all__'
 
-class DatabaseCompetitionswimmersattendingSerializer(serializers.ModelSerializer):
+class GroupCoachesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseCompetitionswimmersattending
-        fields = ['competition', 'swimmer'] 
+        model = GroupCoaches
+        fields = '__all__'
 
-class DatabaseEntrySerializer(serializers.ModelSerializer):
+class AdminSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseEntry
-        fields = ['swimmer', 'event']
+        model = Admin
+        fields = '__all__'
 
-class DatabaseEventSerializer(serializers.ModelSerializer):
+class GroupPracticesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseEvent
-        fields = ['name', 'distance', 'stroke']
+        model = GroupPractices
+        fields = '__all__'
 
-class DatabaseEventrecordSerializer(serializers.ModelSerializer):
+class CompetitionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseEventrecord
-        fields = ['id', 'final_time_seconds', 'distance', 'stroke', 'course', 'competition']
+        model = Competition
+        fields = '__all__'
 
-class DatabaseGroupSerializer(serializers.ModelSerializer):
+class CompetitionCoachDelegationsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseGroup
-        fields = ['name', 'club']
+        model = CompetitionCoachDelegations
+        fields = '__all__'
 
-class DatabaseGroupNameOnlySerializer(serializers.ModelSerializer):
+class CompetitionSwimmersAttendingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseGroup
-        fields = ['name']
+        model = CompetitionSwimmersAttending
+        fields = '__all__'
 
-class DatabaseGroupcoachesSerializer(serializers.ModelSerializer):
+class EventRecordSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseGroupcoaches
-        fields = ['coach', 'group']
+        model = EventRecord
+        fields = '__all__'
 
-class DatabaseGrouppracticesSerializer(serializers.ModelSerializer):
+class EventSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseGrouppractices
-        fields = ['group', 'day', 'time']
+        model = Event
+        fields = '__all__'
 
-class DatabaseSwimmerSerializer(serializers.ModelSerializer):
+class EntrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = DatabaseSwimmer
-        fields = ['email', 'dob', 'fname', 'lname', 'club']
-
-class SwimmerAndGroupSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    email = serializers.CharField(max_length = 254)
-    fname = serializers.CharField(max_length = 15)
-    lname = serializers.CharField(max_length = 30)
-    dob = serializers.DateField()
-    group_id = serializers.CharField(max_length = 100)
-
-class DatabaseSwimmergroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DatabaseSwimmergroup
-        fields = ['swimmer', 'group']
+        model = Entry
+        fields = '__all__'

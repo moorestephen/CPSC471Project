@@ -203,7 +203,7 @@ class DatabaseGrouppractices(models.Model):
 
 
 class DatabaseSwimmer(models.Model):
-    email = models.CharField(unique=True, max_length=254)
+    email = models.CharField(primary_key=True, unique=True, max_length=254)
     dob = models.DateField()
     fname = models.CharField(max_length=15)
     lname = models.CharField(max_length=30)

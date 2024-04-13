@@ -13,7 +13,7 @@ import { TableBody, TableCell, TableHead, TableRow, Button, Box,
 import { Autocomplete } from '@material-ui/lab';
 
 function AddSwimmerPopup(props) {
-    const { open, onClose } = props;
+    const { open, onClose, setSwimmerData } = props;
     const [ groups, setGroups ] = useState([]);
 
     useEffect(() => {
@@ -27,7 +27,40 @@ function AddSwimmerPopup(props) {
         }, []);
 
     const handleClose = () => {
+        console.log("WHAT THE FUCK");
+        axios.post('http://localhost:8000/database/swimmers/', {
+            email: document.getElementById('email').value,
+            dob: document.getElementById('dob').value,
+            fname: document.getElementById('fname').value,
+            lname: document.getElementById('lname').value,
+            club: "Sockeyes"
+        })
+        .then(response => {
+            console.log('received response from first post');
+            axios.get('http://localhost:8000/database/group-names/')
+                .then(response => {
+                    console.log('received response from first get');
+                    setGroups(response.data);
+                    axios.post('http://localhost:8000/database/swimmers-group/', {
+                        swimmer: document.getElementById('email').value,
+                        group: document.getElementById('group-select').value
+                    })
+                        .then(response => {
+                            console.log("successful");
+                        }).catch((error) => {
+                            console.log(error);
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            .catch((error) => {
+                console.log(error);
+            });    
+        }); 
+
         onClose();
+
     };
 
     return (
@@ -36,19 +69,20 @@ function AddSwimmerPopup(props) {
             <DialogContent >
                 <Grid container spacing={2}>
                     <Grid item>
-                        <TextField required label="Email" variant="outlined" InputLabelProps={{shrink: true}}/>
+                        <TextField required id="email" label="Email" variant="outlined" InputLabelProps={{shrink: true}}/>
                     </Grid>
                     <Grid item>
-                        <TextField required label="First Name" variant="outlined" InputLabelProps={{shrink: true}}/>
+                        <TextField required id="fname" label="First Name" variant="outlined" InputLabelProps={{shrink: true}}/>
                     </Grid>
                     <Grid item>
-                        <TextField required label="Last Name" variant="outlined" InputLabelProps={{shrink: true}}/>
+                        <TextField required id="lname" label="Last Name" variant="outlined" InputLabelProps={{shrink: true}}/>
                     </Grid>
                     <Grid item>
-                        <TextField required type="date" label="Birthdate" variant="outlined" InputLabelProps={{shrink: true}}/>
+                        <TextField required id="dob" type="date" label="Birthdate" variant="outlined" InputLabelProps={{shrink: true}}/>
                     </Grid>
                     <Grid item>
                         <Autocomplete
+                            required
                             id="group-select"
                             options={groups}
                             getOptionLabel={(option) => option.name}
@@ -132,7 +166,7 @@ export default function AdminPage(props) {
                         </Table>
                         <Box display="flex" justifyContent="flex-end">
                             <Button variant="outlined" onClick={handleClickOpen}>Add Swimmer</Button>
-                            <AddSwimmerPopup open={popupOpen} onClose={handleClose} />
+                            <AddSwimmerPopup open={popupOpen} onClose={handleClose} setSwimmerData={setSwimmerData} />
                         </Box>
                     </Paper>
                 </Grid>

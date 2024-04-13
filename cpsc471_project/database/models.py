@@ -30,8 +30,7 @@ class Club(models.Model):
 
 class Swimmer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank = True, null = True)
-    id = models.AutoField(primary_key=True)
-    email = models.EmailField(unique=True, max_length = 50)
+    email = models.EmailField(primary_key=True, max_length = 50)
     dob = models.DateField()
     fname = models.CharField(max_length=15)
     lname = models.CharField(max_length=30)
@@ -42,7 +41,7 @@ class Group(models.Model):
     monthly_fee = models.DecimalField(max_digits=5, decimal_places=2)
     club = models.ForeignKey(Club, on_delete=models.CASCADE)
 
-class swimmerGroup(models.Model):
+class SwimmerGroup(models.Model):
     swimmer = models.ForeignKey(Swimmer, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
