@@ -16,6 +16,7 @@
 #     #Admin-specific view logic
 #     return HttpResponse("<h1>Admin Dashboard<h1>")
 
+from django.db import connection
 from .models2 import (DatabaseClub, DatabaseAdmin, DatabaseCoach, DatabaseCompetition,
                       DatabaseCompetitioncoachdelegations, DatabaseCompetitionswimmersattending,
                       DatabaseEntry, DatabaseEvent, DatabaseEventrecord, DatabaseGroup, DatabaseGroupcoaches,
@@ -25,8 +26,10 @@ from .serializers import (ClubListSerializer, DatabaseAdminSerializer, DatabaseC
                           DatabaseCompetitionswimmersattendingSerializer, DatabaseEntrySerializer,
                           DatabaseEventSerializer, DatabaseEventrecordSerializer, DatabaseGroupSerializer,
                           DatabaseGroupcoachesSerializer, DatabaseGrouppracticesSerializer, DatabaseSwimmerSerializer,
-                          DatabaseSwimmergroupSerializer)
+                          DatabaseSwimmergroupSerializer, SwimmerAndGroupSerializer)
 from rest_framework import status, mixins, generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
     
 class ClubList(generics.ListCreateAPIView):
     queryset = DatabaseClub.objects.all()
@@ -123,6 +126,14 @@ class GroupPracticesDetail(generics.RetrieveUpdateDestroyAPIView):
 class SwimmerList(generics.ListCreateAPIView):
     queryset = DatabaseSwimmer.objects.all()
     serializer_class = DatabaseSwimmerSerializer
+
+class SwimmerAndGroupList(APIView):
+    def get(self, request):
+        queryset = DatabaseSwimmer.objects.raw(
+            'SELECT 1 AS id, email, fname, lname, dob, group_id FROM database_swimmer INNER JOIN database_swimmergroup ON database_swimmer.email = database_swimmergroup.swimmer_id'
+        )
+        serialized = SwimmerAndGroupSerializer(queryset, many=True)
+        return Response(serialized.data)
 
 class SwimmerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DatabaseSwimmer.objects.all()

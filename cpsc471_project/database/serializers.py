@@ -69,6 +69,14 @@ class DatabaseSwimmerSerializer(serializers.ModelSerializer):
         model = DatabaseSwimmer
         fields = ['email', 'fname', 'lname', 'club']
 
+class SwimmerAndGroupSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    email = serializers.CharField(max_length = 254)
+    fname = serializers.CharField(max_length = 15)
+    lname = serializers.CharField(max_length = 30)
+    dob = serializers.DateField()
+    group_id = serializers.CharField(max_length = 100)
+
 class DatabaseSwimmergroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = DatabaseSwimmergroup

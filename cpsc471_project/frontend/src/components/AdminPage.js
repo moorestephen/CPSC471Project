@@ -44,7 +44,7 @@ export default function AdminPage(props) {
                                 <TableCell>Name</TableCell>
                                 <TableCell>Email</TableCell>
                                 <TableCell>Birthdate</TableCell>
-                                <TableCell>Club</TableCell>
+                                <TableCell>Group</TableCell>
                             </TableHead>
                             <TableBody>
                                 {swimmerData.map((swimmer) => (
@@ -52,7 +52,7 @@ export default function AdminPage(props) {
                                         <TableCell>{swimmer.fname} {swimmer.lname}</TableCell>
                                         <TableCell>{swimmer.email}</TableCell>
                                         <TableCell>{swimmer.dob}</TableCell>
-                                        <TableCell>{swimmer.club}</TableCell>
+                                        <TableCell>{swimmer.group_id}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
