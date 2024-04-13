@@ -4,13 +4,52 @@ import Paper from '@material-ui/core/Paper';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Table from "@material-ui/core/Table";
-
+import PropTypes from 'prop-types';
 import DisplayAppBar from "./DisplayAppBar.js";
 import UserInformation from "./UserInformation.js";
-import { TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { TableBody, TableCell, TableHead, TableRow, Button, Box,
+         Dialog, DialogContent, TextField,
+         DialogTitle, DialogActions } from "@material-ui/core";
+
+function AddSwimmerPopup(props) {
+    const { onClose, open } = props;
+
+    const handleClose = () => {
+        onClose();
+    };
+
+    return (
+        <Dialog onClose={handleClose} open={open}>
+            <DialogTitle>Add Swimmer</DialogTitle>
+            <DialogContent>
+                <TextField label="Testing" />
+            </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" onClick={handleClose} >
+                    Add Swimmer
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+AddSwimmerPopup.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+};
+
 
 export default function AdminPage(props) {
     const [swimmerData, setSwimmerData] = useState([]);
+    const [popupOpen, setPopupOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setPopupOpen(true);
+    };
+
+    const handleClose = () => {
+        setPopupOpen(false);
+    };
 
     /**
     * Hook that fetches club data from the database - currently no dependencies
@@ -57,6 +96,10 @@ export default function AdminPage(props) {
                                 ))}
                             </TableBody>
                         </Table>
+                        <Box display="flex" justifyContent="flex-end">
+                            <Button variant="outlined" onClick={handleClickOpen}>Add Swimmer</Button>
+                            <AddSwimmerPopup open={popupOpen} onClose={handleClose} />
+                        </Box>
                     </Paper>
                 </Grid>
                 <Grid item xs={4}>
