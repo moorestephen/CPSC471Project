@@ -40,6 +40,12 @@ class GroupCoachesSerializer(serializers.ModelSerializer):
         model = GroupCoaches
         fields = '__all__'
 
+class CoachAndGroupListSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    fname = serializers.CharField(max_length=15)
+    lname = serializers.CharField(max_length=30)
+    group_id = serializers.CharField(max_length=100)
+
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Admin
