@@ -17,7 +17,7 @@ function AddSwimmerPopup(props) {
     const [ groups, setGroups ] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/database/groups/')
+        axios.get('http://localhost:8000/database/group-names/')
             .then(response => {
                 setGroups(response.data);
             })

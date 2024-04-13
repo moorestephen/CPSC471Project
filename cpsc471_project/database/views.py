@@ -138,6 +138,14 @@ class SwimmerAndGroupList(APIView):
         )
         serialized = SwimmerAndGroupSerializer(queryset, many=True)
         return Response(serialized.data)
+    
+class UpcomingCompetitionList(APIView):
+    def get(self, request, format=None):
+        queryset = DatabaseCompetition.objects.raw(
+            "SELECT * FROM database_competition WHERE end_date >= date('now')"
+        )
+        serialized = DatabaseCompetitionSerializer(queryset, many=True)
+        return Response(serialized.data)
 
 class SwimmerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DatabaseSwimmer.objects.all()
