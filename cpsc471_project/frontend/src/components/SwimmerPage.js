@@ -24,7 +24,7 @@ export default function SwimmerPage(props) {
                 console.log(error);
             });
 
-        axios.get(`http://localhost:8000/database/competition`)
+        axios.get(`http://localhost:8000/database/upcoming_competitions`)
             .then(response => {
                 setCompetitionData(response.data);
             })
@@ -47,6 +47,28 @@ export default function SwimmerPage(props) {
                 <Grid item xs={6}>
                     <Paper variant="outlined">
                         <Typography variant='h6'>Event Record</Typography>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Time</TableCell>
+                                    <TableCell>Distance</TableCell>
+                                    <TableCell>Stroke</TableCell>
+                                    <TableCell>Course</TableCell>
+                                    <TableCell>Competition</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {eventRecordData.map((event_record) => (
+                                    <TableRow key={event_record.id}>
+                                        <TableCell>{event_record.final_time_seconds}</TableCell>
+                                        <TableCell>{event_record.distance}</TableCell>
+                                        <TableCell>{event_record.stroke}</TableCell>
+                                        <TableCell>{event_record.course}</TableCell>
+                                        <TableCell>{event_record.competition}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
