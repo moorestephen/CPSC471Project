@@ -67,7 +67,7 @@ class DatabaseGrouppracticesSerializer(serializers.ModelSerializer):
 class DatabaseSwimmerSerializer(serializers.ModelSerializer):
     class Meta:
         model = DatabaseSwimmer
-        fields = ['email', 'fname', 'lname', 'club']
+        fields = ['email', 'dob', 'fname', 'lname', 'club']
 
 class SwimmerAndGroupSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
