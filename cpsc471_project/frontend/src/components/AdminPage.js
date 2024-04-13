@@ -27,38 +27,31 @@ function AddSwimmerPopup(props) {
         }, []);
 
     const handleClose = () => {
-        console.log("WHAT THE FUCK");
         axios.post('http://localhost:8000/database/swimmers/', {
             email: document.getElementById('email').value,
             dob: document.getElementById('dob').value,
             fname: document.getElementById('fname').value,
             lname: document.getElementById('lname').value,
-            club: "Sockeyes"
+            club: "Dinos"
         })
         .then(response => {
-            console.log('received response from first post');
-            axios.get('http://localhost:8000/database/group-names/')
-                .then(response => {
-                    console.log('received response from first get');
-                    setGroups(response.data);
-                    axios.post('http://localhost:8000/database/swimmers-group/', {
-                        swimmer: document.getElementById('email').value,
-                        group: document.getElementById('group-select').value
+            axios.post('http://localhost:8000/database/swimmers-group/', {
+                "swimmer": document.getElementById('email').value,
+                "group": document.getElementById('group-select').value
+            })
+            .then(response => {
+                axios.get('http://localhost:8000/database/swimmers-and-group/')
+                    .then(response => {
+                        setSwimmerData(response.data);
                     })
-                        .then(response => {
-                            console.log("successful");
-                        }).catch((error) => {
-                            console.log(error);
+                    .catch((error) => {
+                        console.log(error);
                     });
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+            })
             .catch((error) => {
                 console.log(error);
-            });    
-        }); 
-
+            });
+        })
         onClose();
 
     };
@@ -125,7 +118,6 @@ export default function AdminPage(props) {
     useEffect(() => {
         axios.get('http://localhost:8000/database/swimmers-and-group/')
             .then(response => {
-                console.log(response.data);
                 setSwimmerData(response.data);
             })
             .catch((error) => {

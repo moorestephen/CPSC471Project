@@ -35,6 +35,14 @@ class GroupRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+class GroupNameOnlyList(APIView):
+    def get(self, request):
+        queryset = Group.objects.raw(
+            'SELECT name FROM database_group'
+        )
+        serialized = GroupSerializer(queryset, many=True)
+        return Response(serialized.data)
+
 class SwimmerGroupListCreate(generics.ListCreateAPIView):
     queryset = SwimmerGroup.objects.all()
     serializer_class = SwimmerGroupSerializer

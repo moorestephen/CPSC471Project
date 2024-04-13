@@ -11,7 +11,7 @@ urlpatterns = [
     path('swimmers/', views.SwimmerListCreate.as_view()),
     # path('upcoming_competitions/', views.UpcomingCompetitionList.as_view()),
     path('event_record/', views.EventRecordListCreate.as_view()),
-    # path('group-names/', views.GroupNameOnlyList.as_view()),
+    path('group-names/', views.GroupNameOnlyList.as_view()),
     path('event_record/', views.EventRecordListCreate.as_view()),
     path('swimmers/', views.SwimmerListCreate.as_view()),
     # path('upcoming_competitions/', views.UpcomingCompetitionList.as_view()),
