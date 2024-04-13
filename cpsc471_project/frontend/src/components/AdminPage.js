@@ -9,7 +9,7 @@ import DisplayAppBar from "./DisplayAppBar.js";
 import UserInformation from "./UserInformation.js";
 import { TableBody, TableCell, TableHead, TableRow, Button, Box,
          Dialog, DialogContent, TextField,
-         DialogTitle, DialogActions} from "@material-ui/core";
+         DialogTitle, DialogActions } from "@material-ui/core";
 import { Autocomplete } from '@material-ui/lab';
 
 function AddSwimmerPopup(props) {
