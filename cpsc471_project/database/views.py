@@ -1,38 +1,137 @@
 #from django.contrib.auth.decorators import login_required, permission_required
 #from django.shortcuts import render
 
-def login_page(request):
-    return HttpResponse("<h1>Login Page<h1>")
+# def login_page(request):
+#     return HttpResponse("<h1>Login Page<h1>")
 
-def swimmer_dashboard(request):
-    #Swimmer-specific view logic
-    return HttpResponse("<h1>Swimmer Dashboard<h1>")
+# def swimmer_dashboard(request):
+#     #Swimmer-specific view logic
+#     return HttpResponse("<h1>Swimmer Dashboard<h1>")
 
-def coach_dashboard(request):
-    #Coach-specific view logic
-    return HttpResponse("<h1>Coach Dashboard<h1>")
+# def coach_dashboard(request):
+#     #Coach-specific view logic
+#     return HttpResponse("<h1>Coach Dashboard<h1>")
 
-def admin_dashboard(request):
-    #Admin-specific view logic
-    return HttpResponse("<h1>Admin Dashboard<h1>")
+# def admin_dashboard(request):
+#     #Admin-specific view logic
+#     return HttpResponse("<h1>Admin Dashboard<h1>")
 
-from .models2 import DatabaseClub
-from .serializers import ClubSerializer
-from django.http import HttpResponse, JsonResponse
-from rest_framework.parsers import JSONParser
-from rest_framework.response import Response
+from .models2 import (DatabaseClub, DatabaseAdmin, DatabaseCoach, DatabaseCompetition,
+                      DatabaseCompetitioncoachdelegations, DatabaseCompetitionswimmersattending,
+                      DatabaseEntry, DatabaseEvent, DatabaseEventrecord, DatabaseGroup, DatabaseGroupcoaches,
+                      DatabaseGrouppractices, DatabaseSwimmer, DatabaseSwimmergroup)
+from .serializers import (ClubListSerializer, DatabaseAdminSerializer, DatabaseCoachSerializer,
+                          DatabaseCompetitionSerializer, DatabaseCompetitioncoachdelegationsSerializer,
+                          DatabaseCompetitionswimmersattendingSerializer, DatabaseEntrySerializer,
+                          DatabaseEventSerializer, DatabaseEventrecordSerializer, DatabaseGroupSerializer,
+                          DatabaseGroupcoachesSerializer, DatabaseGrouppracticesSerializer, DatabaseSwimmerSerializer,
+                          DatabaseSwimmergroupSerializer)
 from rest_framework import status, mixins, generics
-from rest_framework.views import APIView
+    
+class ClubList(generics.ListCreateAPIView):
+    queryset = DatabaseClub.objects.all()
+    serializer_class = ClubListSerializer
 
-class ClubList(APIView):
-    def get(self, request):
-        clubs = DatabaseClub.objects.all()
-        serializer = ClubSerializer(clubs, many=True)
-        return Response(serializer.data)
+class AdminList(generics.ListCreateAPIView):
+    queryset = DatabaseAdmin.objects.all()
+    serializer_class = DatabaseAdminSerializer 
 
-    def post(self, request, format=None):
-        serializer = ClubSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class AdminDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseAdmin.objects.all()
+    serializer_class = DatabaseAdminSerializer
+
+class CoachList(generics.ListCreateAPIView):
+    queryset = DatabaseCoach.objects.all()
+    serializer_class = DatabaseCoachSerializer
+
+class CoachDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseCoach.objects.all()
+    serializer_class = DatabaseCoachSerializer
+
+class CompetitionList(generics.ListCreateAPIView):
+    queryset = DatabaseCompetition.objects.all()
+    serializer_class = DatabaseCompetitionSerializer
+
+class CompetitionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseCompetition.objects.all()
+    serializer_class = DatabaseCompetitionSerializer
+
+class CompetitionCoachDelegationsList(generics.ListCreateAPIView):
+    queryset = DatabaseCompetitioncoachdelegations.objects.all()
+    serializer_class = DatabaseCompetitioncoachdelegationsSerializer
+
+class CompetitionCoachDelegationsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseCompetitioncoachdelegations.objects.all()
+    serializer_class = DatabaseCompetitioncoachdelegationsSerializer
+
+class CompetitionSwimmersAttendingList(generics.ListCreateAPIView):
+    queryset = DatabaseCompetitionswimmersattending.objects.all()
+    serializer_class = DatabaseCompetitionswimmersattendingSerializer
+
+class CompetitionSwimmersAttendingDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseCompetitionswimmersattending.objects.all()
+    serializer_class = DatabaseCompetitionswimmersattendingSerializer
+
+class EntryList(generics.ListCreateAPIView):
+    queryset = DatabaseEntry.objects.all()
+    serializer_class = DatabaseEntrySerializer
+
+class EntryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseEntry.objects.all()
+    serializer_class = DatabaseEntrySerializer
+
+class EventList(generics.ListCreateAPIView):
+    queryset = DatabaseEvent.objects.all()
+    serializer_class = DatabaseEventSerializer
+
+class EventDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseEvent.objects.all()
+    serializer_class = DatabaseEventSerializer
+
+class EventRecordList(generics.ListCreateAPIView):
+    queryset = DatabaseEventrecord.objects.all()
+    serializer_class = DatabaseEventrecordSerializer
+
+class EventRecordDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseEventrecord.objects.all()
+    serializer_class = DatabaseEventrecordSerializer
+
+class GroupList(generics.ListCreateAPIView):
+    queryset = DatabaseGroup.objects.all()
+    serializer_class = DatabaseGroupSerializer
+
+class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseGroup.objects.all()
+    serializer_class = DatabaseGroupSerializer
+
+class GroupCoachesList(generics.ListCreateAPIView):
+    queryset = DatabaseGroupcoaches.objects.all()
+    serializer_class = DatabaseGroupcoachesSerializer
+
+class GroupCoachesDetail(generics.RetrieveUpdateDestroyAPIView):    
+    queryset = DatabaseGroupcoaches.objects.all()
+    serializer_class = DatabaseGroupcoachesSerializer
+
+class GroupPracticesList(generics.ListCreateAPIView):
+    queryset = DatabaseGrouppractices.objects.all()
+    serializer_class = DatabaseGrouppracticesSerializer
+
+class GroupPracticesDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseGrouppractices.objects.all()
+    serializer_class = DatabaseGrouppracticesSerializer
+
+class SwimmerList(generics.ListCreateAPIView):
+    queryset = DatabaseSwimmer.objects.all()
+    serializer_class = DatabaseSwimmerSerializer
+
+class SwimmerDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseSwimmer.objects.all()
+    serializer_class = DatabaseSwimmerSerializer
+
+class SwimmerGroupList(generics.ListCreateAPIView):
+    queryset = DatabaseSwimmergroup.objects.all()
+    serializer_class = DatabaseSwimmergroupSerializer
+
+class SwimmerGroupDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DatabaseSwimmergroup.objects.all()
+    serializer_class = DatabaseSwimmergroupSerializer
