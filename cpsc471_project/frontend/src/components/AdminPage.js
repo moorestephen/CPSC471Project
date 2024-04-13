@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Paper from '@material-ui/core/Paper';
-import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import { Link } from "react-router-dom";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Table from "@material-ui/core/Table";
 
 import DisplayAppBar from "./DisplayAppBar.js";
@@ -19,15 +10,15 @@ import UserInformation from "./UserInformation.js";
 import { TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 
 export default function AdminPage(props) {
-    const [clubData, setClubData] = useState([]);
+    const [swimmerData, setSwimmerData] = useState([]);
 
     /**
     * Hook that fetches club data from the database - currently no dependencies
     */
     useEffect(() => {
-        axios.get('http://localhost:8000/database/clubs/')
+        axios.get('http://localhost:8000/database/swimmers/')
             .then(response => {
-                setClubData(response.data);
+                setSwimmerData(response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -56,10 +47,12 @@ export default function AdminPage(props) {
                                 <TableCell>Club</TableCell>
                             </TableHead>
                             <TableBody>
-                                {clubData.map((club) => (
-                                    <TableRow key={club.name}>
-                                        <TableCell>{club.name}</TableCell>
-                                        <TableCell>{club.city}</TableCell>
+                                {swimmerData.map((swimmer) => (
+                                    <TableRow key={swimmer.email}>
+                                        <TableCell>{swimmer.fname} {swimmer.lname}</TableCell>
+                                        <TableCell>{swimmer.email}</TableCell>
+                                        <TableCell>{swimmer.dob}</TableCell>
+                                        <TableCell>{swimmer.club}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
