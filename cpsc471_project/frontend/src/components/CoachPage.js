@@ -34,9 +34,9 @@ export default function CoachPage(props) {
                         <UserInformation name={props.coachName} role="Coach" />
                     </Paper>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <Paper variant="outlined">
-                        <Typography variant='h6'>Swimmers Data</Typography>
+                        <Typography variant='h6'>Swimmers</Typography>
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
@@ -57,6 +57,11 @@ export default function CoachPage(props) {
                                 ))}
                             </TableBody>
                         </Table>
+                    </Paper>
+                </Grid>
+                <Grid item xs={6}>
+                    <Paper variant="outlined">
+                        <Typography variant='h6'>Competitions</Typography>
                     </Paper>
                 </Grid>
             </Grid>
