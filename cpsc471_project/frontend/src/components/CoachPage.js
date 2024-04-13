@@ -82,7 +82,7 @@ export default function CoachPage(props) {
                                 {competitionData.map((competition) => (
                                     <TableRow key={competition.name}>
                                         <TableCell>{competition.name}</TableCell>
-                                        <TableCell>{competition.sanctioned}</TableCell>
+                                        <TableCell>{competition.sanctioned ? 'Yes' : 'No'}</TableCell>
                                         <TableCell>{competition.start_date} to {competition.end_date}</TableCell>
                                     </TableRow>
                                 ))}
