@@ -47,7 +47,7 @@ class DatabaseEventSerializer(serializers.ModelSerializer):
 class DatabaseEventrecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = DatabaseEventrecord
-        fields = ['entry', 'event', 'time']
+        fields = ['id', 'final_time_seconds', 'distance', 'stroke', 'course', 'competition']
 
 class DatabaseGroupSerializer(serializers.ModelSerializer):
     class Meta:
