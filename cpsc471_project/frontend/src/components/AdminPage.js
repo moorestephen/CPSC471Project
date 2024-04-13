@@ -125,6 +125,7 @@ export default function AdminPage(props) {
     useEffect(() => {
         axios.get('http://localhost:8000/database/swimmers-and-group/')
             .then(response => {
+                console.log(response.data);
                 setSwimmerData(response.data);
             })
             .catch((error) => {

@@ -23,6 +23,13 @@ class SwimmerGroupSerializer(serializers.ModelSerializer):
         model = SwimmerGroup
         fields = '__all__'
 
+class SwimmerAndGroupListSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    fname = serializers.CharField(max_length=15)
+    lname = serializers.CharField(max_length=30)
+    dob = serializers.DateField()
+    group_id = serializers.CharField(max_length=100)
+
 class CoachSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coach

@@ -4,9 +4,12 @@ from .models import (Club, Swimmer, Group, SwimmerGroup, Coach, GroupCoaches, Ad
 from .serializers import (ClubSerializer, SwimmerSerializer, GroupSerializer, SwimmerGroupSerializer,
                           CoachSerializer, GroupCoachesSerializer, AdminSerializer, GroupPracticesSerializer,
                           CompetitionSerializer, CompetitionCoachDelegationsSerializer, CompetitionSwimmersAttendingSerializer,
-                          EventRecordSerializer, EventSerializer, EntrySerializer)
+                          EventRecordSerializer, EventSerializer, EntrySerializer, 
+                          SwimmerAndGroupListSerializer)
 
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 class ClubListCreate(generics.ListCreateAPIView):
     queryset = Club.objects.all()
@@ -39,6 +42,14 @@ class SwimmerGroupListCreate(generics.ListCreateAPIView):
 class SwimmerGroupRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = SwimmerGroup.objects.all()
     serializer_class = SwimmerGroupSerializer
+
+class SwimmerAndGroupList(APIView):
+    def get(self, request):
+        queryset = Swimmer.objects.raw(
+            'SELECT email, fname, lname, dob, group_id FROM database_swimmer INNER JOIN database_swimmergroup ON database_swimmer.email = database_swimmergroup.swimmer_id'
+        )
+        serialized = SwimmerAndGroupListSerializer(queryset, many=True)
+        return Response(serialized.data)
 
 class CoachListCreate(generics.ListCreateAPIView):
     queryset = Coach.objects.all()
