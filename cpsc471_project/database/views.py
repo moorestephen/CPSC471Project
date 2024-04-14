@@ -19,12 +19,21 @@ class UserLogin(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
+
         print(username, password)
-        user = authenticate(username=username, password=password)
+        
+        #query user based on provided username
+        try:
+            user = User.objects.get(username = username, password = password)
+        except User.DoesNotExist:
+            user = None
+
         if user is not None:
+            #user found and password matches
             return Response({'message': 'Login Successful'})
         else:
             return Response({'message': 'Login Failed'})
+            
 
 class UserCreate(APIView):
     def post(self, request):
