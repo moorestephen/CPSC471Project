@@ -103,6 +103,14 @@ class CompetitionListCreate(generics.ListCreateAPIView):
     queryset = Competition.objects.all()
     serializer_class = CompetitionSerializer
 
+class CompetitionNameOnlyList(APIView):
+     def get(self, request):
+        queryset = Competition.objects.raw(
+            'SELECT name FROM database_competition'
+        )
+        serialized = CompetitionSerializer(queryset, many=True)
+        return Response(serialized.data)
+
 class CompetitionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Competition.objects.all()
     serializer_class = CompetitionSerializer
@@ -124,8 +132,12 @@ class CompetitionSwimmersAttendingRetrieveUpdateDestroy(generics.RetrieveUpdateD
     serializer_class = CompetitionSwimmersAttendingSerializer
 
 class EventRecordListCreate(generics.ListCreateAPIView):
-    queryset = EventRecord.objects.all()
-    serializer_class = EventRecordSerializer
+    def get(self, request):
+        queryset = Coach.objects.raw(
+            'SELECT entry_time, final_time_seconds, distance, stroke, course, swimmer_id, competition_id FROM database_eventrecord INNER JOIN database_swimmer ON database_swimmer.email = database_eventrecord.swimmer_id'
+        )
+        serialized = EventRecordSerializer(queryset, many=True)
+        return Response(serialized.data)
 
 class EventRecordRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = EventRecord.objects.all()
