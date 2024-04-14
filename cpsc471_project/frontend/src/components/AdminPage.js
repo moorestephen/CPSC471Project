@@ -27,31 +27,41 @@ function AddSwimmerPopup(props) {
         }, []);
 
     const handleClose = () => {
-        axios.post('http://localhost:8000/database/swimmers/', {
+        axios.post('http://localhost:8000/database/create-user/', {
             email: document.getElementById('email').value,
-            dob: document.getElementById('dob').value,
-            fname: document.getElementById('fname').value,
-            lname: document.getElementById('lname').value,
-            club: "Dinos"
+            username: document.getElementById('email').value,
+            password: "password",
+            role: 3
         })
         .then(response => {
-            axios.post('http://localhost:8000/database/swimmers-group/', {
-                "swimmer": document.getElementById('email').value,
-                "group": document.getElementById('group-select').value
+            axios.post('http://localhost:8000/database/swimmers/', {
+                email: document.getElementById('email').value,
+                dob: document.getElementById('dob').value,
+                fname: document.getElementById('fname').value,
+                lname: document.getElementById('lname').value,
+                user: response.data.id,
+                club: "Dinos"
             })
             .then(response => {
-                axios.get('http://localhost:8000/database/swimmers-and-group/')
-                    .then(response => {
-                        setSwimmerData(response.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                axios.post('http://localhost:8000/database/swimmers-group/', {
+                    "swimmer": document.getElementById('email').value,
+                    "group": document.getElementById('group-select').value
+                })
+                .then(response => {
+                    axios.get('http://localhost:8000/database/swimmers-and-group/')
+                        .then(response => {
+                            setSwimmerData(response.data);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
             })
-            .catch((error) => {
-                console.log(error);
-            });
-        })
+        }) 
+        
         onClose();
 
     };
@@ -103,25 +113,35 @@ function AddCoachPopup(props) {
     const {open, onClose, setCoachData} = props;
 
     const handleClose = () => {
-        axios.post('http://localhost:8000/database/coaches/', {
+        axios.post('http://localhost:8000/database/create-user/', {
             email: document.getElementById('email').value,
-            fname: document.getElementById('fname').value,
-            lname: document.getElementById('lname').value,
-            tenure_start: document.getElementById('tenure_start').value,
-            contract_start: document.getElementById('contract_start').value,
-            club: "Dinos"
+            username: document.getElementById('email').value,
+            password: "password",
+            role: 2
         })
         .then(response => {
-            axios.get('http://localhost:8000/database/coaches/')
-                .then(response => {
-                    setCoachData(response.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            axios.post('http://localhost:8000/database/coaches/', {
+                email: document.getElementById('email').value,
+                fname: document.getElementById('fname').value,
+                lname: document.getElementById('lname').value,
+                tenure_start: document.getElementById('tenure_start').value,
+                contract_start: document.getElementById('contract_start').value,
+                user: response.data.id,
+                club: "Dinos"
+            })
+            .then(response => {
+                axios.get('http://localhost:8000/database/coaches/')
+                    .then(response => {
+                        setCoachData(response.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            })
+
         })
         onClose();
-    }
+    };
 
     return (
         <Dialog onClose={handleClose} open={open}>

@@ -1,15 +1,57 @@
 from .models import (Club, Swimmer, Group, SwimmerGroup, Coach, GroupCoaches, Admin,
                      GroupPractices, Competition, CompetitionCoachDelegations, 
-                     CompetitionSwimmersAttending, EventRecord, Event, Entry)
+                     CompetitionSwimmersAttending, EventRecord, Event, Entry, User)
 from .serializers import (ClubSerializer, SwimmerSerializer, GroupSerializer, SwimmerGroupSerializer,
                           CoachSerializer, GroupCoachesSerializer, AdminSerializer, GroupPracticesSerializer,
                           CompetitionSerializer, CompetitionCoachDelegationsSerializer, CompetitionSwimmersAttendingSerializer,
                           EventRecordSerializer, EventSerializer, EntrySerializer, 
-                          SwimmerAndGroupListSerializer, CoachAndGroupListSerializer)
-
+                          SwimmerAndGroupListSerializer, CoachAndGroupListSerializer, UserSerializer)
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth import authenticate
+
+class UserLogin(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        print(username, password)
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            return Response({'message': 'Login Successful'})
+        else:
+            return Response({'message': 'Login Failed'})
+
+class UserCreate(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data.get('email') 
+            username = serializer.validated_data.get('username')
+            password = serializer.validated_data.get('password')
+            role = serializer.validated_data.get('role')
+
+            if User.objects.filter(username=username).exists():
+                return Response({'message': 'Username already exists'})
+            
+            user = User.objects.create_user(username=username, password=password, email=email, role = role)
+            user.save()
+            return Response({'message': 'User created successfully'})
+        else:
+            return Response({'message': 'User creation failed'})
+
+class UserListCreate(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
 
 class ClubListCreate(generics.ListCreateAPIView):
     queryset = Club.objects.all()

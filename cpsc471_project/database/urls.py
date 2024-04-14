@@ -20,5 +20,7 @@ urlpatterns = [
     # path('upcoming_competitions/', views.UpcomingCompetitionList.as_view()),
     path('event_record/', views.EventRecordListCreate.as_view()),
     path('swimmers-group/', views.SwimmerGroupListCreate.as_view()),
-    path('groups/', views.GroupListCreate.as_view())
+    path('groups/', views.GroupListCreate.as_view()),
+    path('create-user/', views.UserListCreate.as_view()),
+    path('retrieve-user/', views.UserLogin.as_view())
 ]
