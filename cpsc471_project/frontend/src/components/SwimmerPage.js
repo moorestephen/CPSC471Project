@@ -23,7 +23,7 @@ function AddEventRecordPopup(props) {
 
 
     useEffect(() => {
-        axios.get('http://localhost:8000/database/upcoming_competitions/')
+        axios.get('http://localhost:8000/database/competitionNames/')
             .then(response => {
                 
                 setCompetitionData(response.data);

@@ -190,13 +190,17 @@ class CompetitionSwimmersAttendingRetrieveUpdateDestroy(generics.RetrieveUpdateD
     queryset = CompetitionSwimmersAttending.objects.all()
     serializer_class = CompetitionSwimmersAttendingSerializer
 
-class EventRecordListCreate(generics.ListCreateAPIView):
+class EventRecordSwimmerListCreate(APIView):
     def get(self, request):
-        queryset = Coach.objects.raw(
-            'SELECT entry_time, final_time_seconds, distance, stroke, course, swimmer_id, competition_id FROM database_eventrecord INNER JOIN database_swimmer ON database_swimmer.email = database_eventrecord.swimmer_id'
+        queryset = EventRecord.objects.raw(
+            'SELECT entry_time, final_time_seconds, distance, stroke, course, swimmer, competition FROM database_eventrecord INNER JOIN database_swimmer ON database_eventrecord.swimmer = database_swimmer.email'
         )
         serialized = EventRecordSerializer(queryset, many=True)
         return Response(serialized.data)
+
+class EventRecordListCreate(generics.ListCreateAPIView):
+    queryset = EventRecord.objects.all()
+    serializer_class = EventRecordSerializer
 
 class EventRecordRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = EventRecord.objects.all()
