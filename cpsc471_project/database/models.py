@@ -1,10 +1,10 @@
-from django.contrib.auth.models import AbstractUser, Permission
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-#USERS AND PERMISSIONS
+# USERS AND PERMISSIONS
 class User(AbstractUser):
     email = models.EmailField(unique = True, max_length = 50)
-    
+
     #ROLES
     ADMIN = 1
     COACH = 2
@@ -14,15 +14,13 @@ class User(AbstractUser):
         (COACH, "Coach"),
         (SWIMMER, "Swimmer")
     )
-
     role = models.PositiveSmallIntegerField(choices = ROLE_CHOICES, blank = True, null = True)
-    
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
-
     def __str__(self):
         return self.email
-    
+
 # Create your models here.
 class Club(models.Model):
     name = models.CharField(primary_key=True, max_length=100)

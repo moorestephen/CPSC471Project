@@ -1,7 +1,12 @@
 from rest_framework import serializers
 from .models import(Club, Swimmer, Group, SwimmerGroup, Coach, GroupCoaches, Admin,
                      GroupPractices, Competition, CompetitionCoachDelegations, 
-                     CompetitionSwimmersAttending, EventRecord, Event, Entry)
+                     CompetitionSwimmersAttending, EventRecord, Event, Entry, User)
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
 class ClubSerializer(serializers.ModelSerializer):
     class Meta:
