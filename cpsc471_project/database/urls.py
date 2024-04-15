@@ -22,5 +22,7 @@ urlpatterns = [
     path('swimmers-group/', views.SwimmerGroupListCreate.as_view()),
     path('groups/', views.GroupListCreate.as_view()),
     path('create-user/', views.UserListCreate.as_view()),
-    path('retrieve-user/', views.UserLogin.as_view())
+    path('retrieve-user/', views.UserLogin.as_view()),
+    path('competitions/', views.CompetitionListCreate.as_view()),
+    path('competitionNames/', views.CompetitionNameOnlyList.as_view())
 ]

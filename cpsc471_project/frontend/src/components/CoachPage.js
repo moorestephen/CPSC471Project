@@ -4,26 +4,158 @@ import Paper from '@material-ui/core/Paper';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Table from "@material-ui/core/Table";
-import { TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import PropTypes from 'prop-types';
+import { Autocomplete } from '@material-ui/lab';
+
+
+import { TableBody, TableCell, TableHead, TableRow, Button, Box,
+    Dialog, DialogContent, TextField,
+    DialogTitle, DialogActions } from "@material-ui/core";
+
+
+function AddEventRecordPopup(props) {
+    const {open, onClose, setEventRecordData} = props;
+    const [competitionData, setCompetitionData ] = useState([]);
+    const [swimmerData, setSwimmerData ] = useState([]);
+    const [swimmer, setSwimmer ] = useState([]);
+
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/database/competitionNames/')
+            .then(response => {
+                
+                setCompetitionData(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        
+        axios.get('http://localhost:8000/database/swimmers/')
+            .then(response => {
+                setSwimmer(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        },
+
+        []);
+
+        
+    const handleClose = () => {
+        axios.post('http://localhost:8000/database/event_record/', {
+            entry_time: document.getElementById('entry_time').value,
+            final_time_seconds: document.getElementById('final_time_seconds').value,
+            distance: document.getElementById('distance').value,
+            stroke: document.getElementById('stroke').value,
+            course: document.getElementById('course').value,
+            competition: document.getElementById('competition-select').value,
+            swimmer: document.getElementById('swimmer-select').value,
+        })
+        .then(response => {
+            axios.get('http://localhost:8000/database/event_record/')  
+                .then(response => {
+                    setEventRecordData(response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });            
+        onClose();
+    };
+
+    return (
+        <Dialog onClose={handleClose} open={open}>
+            <DialogTitle>Add Event Record</DialogTitle>
+            <DialogContent >
+                <Grid container spacing={2}>
+                <Grid item>
+                        <TextField required id="swimmer_name" label="Swimmer Name" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <TextField required id="entry_time" type='time' label="Entry Time" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <TextField required id="final_time_seconds" type='number' label="Final Time (Seconds)" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <TextField required id="distance" type='number' label="Distance" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <TextField required id="stroke" label="Stroke" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <TextField required id="course" label="Course" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <Autocomplete
+                            required
+                            id="swimmer-select"
+                            options={swimmer}
+                            getOptionLabel={(option) => option.email}
+                            style={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} label="Swimmers" variant="outlined" />}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <Autocomplete
+                            required
+                            id="competition-select"
+                            options={competitionData}
+                            getOptionLabel={(option) => option.name}
+                            style={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} label="Competitions" variant="outlined" />}
+                        />
+                    </Grid>
+                   
+                </Grid>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" onClick={handleClose} >
+                    Add Event Record
+                </Button>
+            </DialogActions>
+        </Dialog>
+    
+    )
+}
+
+AddEventRecordPopup.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+};
 
 import DisplayAppBar from "./DisplayAppBar.js";
 import UserInformation from "./UserInformation.js";
 
 export default function CoachPage(props) {
-    const [swimmersData, setSwimmersData] = useState([]);
+    const [eventRecordData, setEventRecordData] = useState([]);
     const [competitionData, setCompetitionData] = useState([]);
+    const [AddEventRecordPopupOpen, setAddEventPopupOpen] = useState(false);
+
+    const handleAddEventClickOpen = () => {
+        setAddEventPopupOpen(true);
+    };
+
+    const handleAddEventClickClose = () => {
+        setAddEventPopupOpen(false);
+    };
+
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/database/swimmers`)
+        axios.get(`http://localhost:8000/database/event_record`)
             .then(response => {
-                setSwimmersData(response.data);
+                setEventRecordData(response.data);
             })
             .catch((error) => {
                 console.log(error);
             });
 
         
-        axios.get(`http://localhost:8000/database/upcoming_competitions`)
+        axios.get(`http://localhost:8000/database/competitions`)
             .then(response => {
                 setCompetitionData(response.data);
             })
@@ -45,27 +177,38 @@ export default function CoachPage(props) {
                 </Grid>
                 <Grid item xs={6}>
                     <Paper variant="outlined">
-                        <Typography variant='h6'>Swimmers</Typography>
+                        <Typography variant='h6'>Event Record</Typography>
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Email</TableCell>
-                                    <TableCell>Birthdate</TableCell>
-                                    <TableCell>Club</TableCell>
+                                
+                                <TableCell>Swimmer Email</TableCell>
+                                    <TableCell>Time</TableCell>
+                                    <TableCell>Distance</TableCell>
+                                    <TableCell>Stroke</TableCell>
+                                    <TableCell>Course</TableCell>
+                                    <TableCell>Competition</TableCell>
+                                    
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {swimmersData.map((swimmer) => (
-                                    <TableRow key={swimmer.id}>
-                                        <TableCell>{swimmer.fname} {swimmer.lname}</TableCell>
-                                        <TableCell>{swimmer.email}</TableCell>
-                                        <TableCell>{swimmer.dob}</TableCell>
-                                        <TableCell>{swimmer.club}</TableCell>
+                            {eventRecordData.map((event_record) => (
+                                    <TableRow key={event_record.id}>
+                                       
+                                        <TableCell>{event_record.swimmer}</TableCell>
+                                        <TableCell>{event_record.final_time_seconds}</TableCell>
+                                        <TableCell>{event_record.distance}</TableCell>
+                                        <TableCell>{event_record.stroke}</TableCell>
+                                        <TableCell>{event_record.course}</TableCell>
+                                        <TableCell>{event_record.competition}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
+                        <Box display="flex" justifyContent="flex-end">
+                            <Button variant="outlined" onClick={handleAddEventClickOpen}>Add Event</Button>
+                            <AddEventRecordPopup open={AddEventRecordPopupOpen} onClose={handleAddEventClickClose} setEventRecordData={setEventRecordData} />
+                        </Box>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>

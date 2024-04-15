@@ -77,13 +77,9 @@ class CompetitionSwimmersAttendingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class EventRecordSerializer(serializers.ModelSerializer):
-    entry_time = serializers.TimeField()
-    final_time_seconds = serializers.FloatField()
-    distance = serializers.CharField(max_length=30)
-    stroke = serializers.CharField(max_length=30)
-    course = serializers.CharField(max_length=100)
-    swimmer_id = serializers.EmailField()
-    competition_id = serializers.CharField(max_length=100)
+    class Meta:
+        model = EventRecord
+        fields = '__all__'
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:

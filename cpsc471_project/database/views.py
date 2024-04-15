@@ -154,6 +154,14 @@ class CompetitionListCreate(generics.ListCreateAPIView):
     queryset = Competition.objects.all()
     serializer_class = CompetitionSerializer
 
+class CompetitionNameOnlyList(APIView):
+     def get(self, request):
+        queryset = Competition.objects.raw(
+            'SELECT name FROM database_competition'
+        )
+        serialized = CompetitionSerializer(queryset, many=True)
+        return Response(serialized.data)
+
 class UpcomingCompetitionListCreate(generics.ListCreateAPIView):
     def get(self, request):
         queryset = Competition.objects.raw(

@@ -23,7 +23,7 @@ function AddEventRecordPopup(props) {
 
 
     useEffect(() => {
-        axios.get('http://localhost:8000/database/competitionNames/')
+        axios.get('http://localhost:8000/database/upcoming_competitions/')
             .then(response => {
                 
                 setCompetitionData(response.data);
@@ -50,24 +50,14 @@ function AddEventRecordPopup(props) {
             final_time_seconds: document.getElementById('final_time_seconds').value,
             distance: document.getElementById('distance').value,
             stroke: document.getElementById('stroke').value,
-            course: document.getElementById('course').value
+            course: document.getElementById('course').value,
+            competition: document.getElementById('competition-select').value,
+            swimmer: document.getElementById('swimmer-select').value,
         })
         .then(response => {
-            axios.post('http://localhost:8000/database/swimmers/', {
-                "swimmer": document.getElementById('email').value,
-            })
-            .then(response => {
-                axios.post('http://localhost:8000/database/competitionNames/', {
-                    "competition": document.getElementById('name').value
-                })
+            axios.get('http://localhost:8000/database/event_record/')  
                 .then(response => {
-                    axios.get('http://localhost:8000/database/event_record/')
-                        .then(response => {
-                            setEventRecordData(response.data);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        }); 
+                    setEventRecordData(response.data);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -75,10 +65,9 @@ function AddEventRecordPopup(props) {
             })
             .catch((error) => {
                 console.log(error);
-            });
-            })
-                onClose();
-            };
+            });            
+        onClose();
+    };
 
     return (
         <Dialog onClose={handleClose} open={open}>
@@ -156,14 +145,10 @@ export default function SwimmerPage(props) {
         axios.get(`http://localhost:8000/database/event_record/`)
             .then(response => {
                 setEventRecordData(response.data);
-                console.print(response.data)
             })
             .catch((error) => {
                 console.log(error);
-                console.log("HAHAHAH");
             });
-
-        axios.put()
 
         axios.get(`http://localhost:8000/database/competitions/`)
             .then(response => {
@@ -207,7 +192,7 @@ export default function SwimmerPage(props) {
                                         <TableCell>{event_record.distance}</TableCell>
                                         <TableCell>{event_record.stroke}</TableCell>
                                         <TableCell>{event_record.course}</TableCell>
-                                        <TableCell>{event_record.competition_id}</TableCell>
+                                        <TableCell>{event_record.competition}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
