@@ -10,20 +10,20 @@ import { Autocomplete } from '@material-ui/lab';
 
 import { TableBody, TableCell, TableHead, TableRow, Button, Box,
     Dialog, DialogContent, TextField,
-    DialogTitle, DialogActions } from "@material-ui/core";
+    DialogTitle, DialogActions, 
+    Checkbox,
+    FormControlLabel} from "@material-ui/core";
 
 
 function AddEventRecordPopup(props) {
     const {open, onClose, setEventRecordData} = props;
     const [competitionData, setCompetitionData ] = useState([]);
-    const [swimmerData, setSwimmerData ] = useState([]);
     const [swimmer, setSwimmer ] = useState([]);
 
 
     useEffect(() => {
         axios.get('http://localhost:8000/database/competitionNames/')
             .then(response => {
-                
                 setCompetitionData(response.data);
             })
             .catch((error) => {
@@ -128,13 +128,76 @@ AddEventRecordPopup.propTypes = {
     open: PropTypes.bool.isRequired,
 };
 
+function AddCompetitionPopup(props) {
+    const {open, onClose, setCompetitionData} = props;
+
+    const handleClose = () => {
+        axios.post('http://localhost:8000/database/competitions/', {
+            name: document.getElementById('name').value,
+            sanctioned: document.getElementById('sanctioned').checked,
+            start_date: document.getElementById('start_date').value,
+            end_date: document.getElementById('end_date').value,
+        })
+        .then(response => {
+            axios.get('http://localhost:8000/database/competitions/')  
+                .then(response => {
+                    setCompetitionData(response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        })
+        .catch((error) => {
+            console.log(error);
+        });            
+        onClose();
+    };
+
+    return (
+        <Dialog onClose={handleClose} open={open}>
+            <DialogTitle>Add Competition</DialogTitle>
+            <DialogContent >
+                <Grid container spacing={2}>
+                <Grid item>
+                        <TextField required id="name" label="Name" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item>
+                        <FormControlLabel
+                            control = {<Checkbox required id = 'sanctioned' />}
+                            label = "Sanctioned"
+                        />
+                    </Grid>
+                    <Grid item xs = {6}>
+                        <TextField required id="start_date" type='date' label="Start Date" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>
+                    <Grid item xs = {6}>
+                        <TextField required id="end_date" type='date' label="End Date" variant="outlined" InputLabelProps={{shrink: true}}/>
+                    </Grid>               
+                </Grid>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" onClick={handleClose} >
+                    Add Competition
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+AddCompetitionPopup.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+}
+
 import DisplayAppBar from "./DisplayAppBar.js";
 import UserInformation from "./UserInformation.js";
 
 export default function CoachPage(props) {
+    const [AddCompetitionPopupOpen, setAddCompetitionPopupOpen] = useState(false);
+    const [AddEventRecordPopupOpen, setAddEventPopupOpen] = useState(false);
+
     const [eventRecordData, setEventRecordData] = useState([]);
     const [competitionData, setCompetitionData] = useState([]);
-    const [AddEventRecordPopupOpen, setAddEventPopupOpen] = useState(false);
 
     const handleAddEventClickOpen = () => {
         setAddEventPopupOpen(true);
@@ -142,6 +205,14 @@ export default function CoachPage(props) {
 
     const handleAddEventClickClose = () => {
         setAddEventPopupOpen(false);
+    };
+
+    const handleAddCompetitionClickOpen = () => {
+        setAddCompetitionPopupOpen(true);
+    };
+
+    const handleAddCompetitionClickClose = () => {
+        setAddCompetitionPopupOpen(false);
     };
 
 
@@ -213,7 +284,7 @@ export default function CoachPage(props) {
                 </Grid>
                 <Grid item xs={6}>
                     <Paper variant="outlined">
-                        <Typography variant='h6'>Upcoming Competitions</Typography>
+                        <Typography variant='h6'>Competitions</Typography>
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
@@ -232,6 +303,10 @@ export default function CoachPage(props) {
                                 ))}
                             </TableBody>
                         </Table>
+                        <Box display="flex" justifyContent="flex-end">
+                            <Button variant="outlined" onClick={handleAddCompetitionClickOpen}>Add Competition</Button>
+                            <AddCompetitionPopup open={AddCompetitionPopupOpen} onClose={handleAddCompetitionClickClose} setCompetitionData={setCompetitionData} />
+                        </Box>
                     </Paper>
                 </Grid>
             </Grid>
